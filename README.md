@@ -36,16 +36,24 @@ choice survives in its ADR.
 
 ## Install
 
-With the [skills CLI](https://github.com/vercel-labs/skills), for every agent
-on the machine:
+With the [skills CLI](https://github.com/vercel-labs/skills). Run it from the
+root of the project you are working in:
+
+```bash
+npx skills add Berkantrkgl/cook-skills
+```
+
+This installs the skills into **that project only**. The CLI asks which agents
+to install for.
+
+To make them available in every project on your machine instead:
 
 ```bash
 npx skills add Berkantrkgl/cook-skills -g
 ```
 
-Drop `-g` to install into the current project only. Or copy
-`skills/<name>/` into your agent's skills directory by hand, for example
-`~/.claude/skills/` for Claude Code.
+To install without the CLI, copy `skills/<name>/` into your agent's skills
+directory, for example `.claude/skills/` in a project for Claude Code.
 
 ## Credits
 
