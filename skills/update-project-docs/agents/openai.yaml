@@ -1,0 +1,5 @@
+interface:
+  display_name: "Update Project Docs"
+  short_description: "Keep ADRs, architecture and state honest after work"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Let's Cook Together"
+  short_description: "Grill a design until it is shared, then record it"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Implement"
+  short_description: "Build agreed work test-first, review it, propose a commit"
+policy:
+  allow_implicit_invocation: false
