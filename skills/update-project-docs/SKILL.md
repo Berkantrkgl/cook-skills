@@ -217,10 +217,10 @@ wc -l AGENTS.md .agents/project_docs/architecture.md
 API is data. A `Shipped 2026-…` opener in a dateless file means this ritual was
 skipped and that file is on its way back to being the only file.
 
-(4) is a signal, not a limit. When `architecture.md` passes roughly a thousand
-lines, or `AGENTS.md` a few hundred, the usual cause is stories that were kept
-where only rules should be — re-read the largest section against Step 2 before
-adding to it, and tell the user the file is growing.
+(4) is a signal, not a limit. When `architecture.md` passes roughly two and a
+half thousand lines, or `AGENTS.md` a few hundred, the usual cause is stories
+that were kept where only rules should be — re-read the largest section against
+Step 2 before adding to it, and tell the user the file is growing.
 
 If the project defines its own checks for the docs ritual in `AGENTS.md` (a
 translation check, a link check of its own), run those too.
