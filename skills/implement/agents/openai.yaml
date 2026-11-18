@@ -1,5 +1,5 @@
 interface:
   display_name: "Implement"
-  short_description: "Build agreed work test-first, review it, propose a commit"
+  short_description: "Build agreed work, review it, propose a commit (tdd optional)"
 policy:
   allow_implicit_invocation: false

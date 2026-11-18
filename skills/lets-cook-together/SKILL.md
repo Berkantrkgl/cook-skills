@@ -41,8 +41,8 @@ given. A question whose answer depends on another question still open belongs
 to a later round.
 
 When the topic is something to be built, the tree always has one more branch:
-**where the behaviour will be tested** — the seams `/implement` will write its
-tests against. Ask it once what is being built is settled; it is not a detail
+**where the behaviour will be tested** — the seams the tests will be written
+against, by `/implement tdd` or later by `/test-the-meal`. Ask it once what is being built is settled; it is not a detail
 to leave to implementation.
 
 **Facts are yours, decisions are the user's.** When a question needs a fact

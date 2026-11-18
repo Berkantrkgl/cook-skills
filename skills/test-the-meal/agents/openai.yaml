@@ -1,0 +1,5 @@
+interface:
+  display_name: "Test the meal"
+  short_description: "Write the missing tests for recent work, and trim the suite"
+policy:
+  allow_implicit_invocation: false

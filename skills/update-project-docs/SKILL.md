@@ -184,6 +184,9 @@ whole of the job.
   it**, and if it was wrong, say so rather than quietly fixing the row.
 - A new gap the work opened — including work left half-done at the end of a
   session — gets a row stating its **effect**, not its title.
+- Rows under `## Untested` are written by `implement` and deleted by
+  `test-the-meal`, once the tests exist. Building or shipping the work does not
+  close them, so leave them alone here.
 - Sections with an expiry (a launch date, a migration window) are deleted when
   they expire.
 - **Never put a figure in `state.md` that will rot** — a test count, a row

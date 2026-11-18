@@ -1,18 +1,29 @@
 ---
 name: implement
-description: Build a piece of agreed work end to end — test-first at agreed seams, a two-axis review of the result, the docs updated, and a commit proposed for approval. Takes its input from a lets-cook-together summary, or from state.md and the not-built-yet ADRs.
+description: Build a piece of agreed work end to end — no new tests by default (the seams are recorded for /test-the-meal), or test-first with `tdd` — then a two-axis review of the result, the docs updated, and a commit proposed for approval. Takes its input from a lets-cook-together summary, or from state.md and the not-built-yet ADRs.
 disable-model-invocation: true
 ---
 
 # Implement
 
-Build what was agreed, prove it at the seams that were agreed, review it, update
-the docs, and propose a commit. Self-contained: the test discipline and the
-review are both below.
+Build what was agreed, review it, update the docs, and propose a commit.
+Self-contained: the test discipline and the review are both below.
 
 **Language.** Talk in the user's language. Code, comments, test names, commit
 messages and docs are in **English**, unless the project's `AGENTS.md` says
 otherwise.
+
+**Modes**, from what the user typed after the command:
+
+| typed | does |
+|---|---|
+| nothing | **build without writing new tests.** Keep the existing tests green, and record the seams as `Untested` in `state.md`, so `/test-the-meal` can write the tests later, for several features at once |
+| `tdd` | build test-first at the agreed seams (step 3b), and record nothing as untested |
+
+The default is there because a test per slice, for every feature, grows the
+suite at the rate work happens. Use `tdd` when the logic is tricky enough that
+a failing test first is the fastest way to get it right, such as money, time
+zones, permissions or a parser.
 
 ---
 
@@ -22,7 +33,8 @@ Take the work from, in this order:
 
 1. the **`lets-cook-together` summary** in this conversation — goal, decisions,
    out of scope, test seams, steps;
-2. otherwise the **`state.md` rows** and the ADRs marked
+2. otherwise the **`state.md` rows** (not the ones under `## Untested`; those
+   are `/test-the-meal`'s) and the ADRs marked
    `Status: accepted — not built yet` in `.agents/project_docs/` (or the
    project's own doc layout, if its `AGENTS.md` describes one);
 3. otherwise ask **one short question** — what to build. Do not start an
@@ -41,10 +53,42 @@ one line before the first edit, so what was there is not mistaken for this work.
 A **seam** is the public boundary where behaviour is observed without reaching
 inside — the interface a test calls. Tests are written **only at agreed seams**.
 
-Take them from the summary. If there is none, propose them in one short
-question before the first test, and start once they are confirmed.
+Take them from the summary. If there is none:
 
-## 3. Build it, test first
+- **default mode**: do not ask. Name the seams yourself from the code you
+  built, and write them into the `Untested` row in step 5. `/test-the-meal` confirms
+  them before it writes anything.
+- **`tdd` mode**: propose them in one short question before the first test, and
+  start once they are confirmed.
+
+## 3. Build it (default mode)
+
+Build in vertical slices, one step of the agreed work at a time, and **write no
+new tests.**
+
+**Keep the existing tests honest:**
+
+- After each slice, run the typecheck and **the existing tests of the area you
+  touched**. Find them by the module, endpoint or component they exercise, not
+  by running the whole suite. The full suite runs in `/test-the-meal`.
+- **A test that breaks because the agreed behaviour changed** is updated to the
+  new behaviour. Say which tests were updated and which agreed line made the
+  change necessary.
+- **A test that breaks for any other reason is a regression.** Fix the code,
+  not the test.
+- Never delete or skip a failing test to get green. Trimming the suite is
+  `/test-the-meal`'s job, and it asks first.
+
+**Where nothing tests the change at all**, such as a page, a migration or a
+script, verify it by running it, the way `AGENTS.md` describes. Say how each
+part was verified.
+
+**When a decision turns out to be wrong** — the code contradicts something that
+was agreed — stop and ask one short question. Never deviate from an agreed
+decision silently. If the decision changes, it will be recorded as a new ADR
+superseding the old one in step 5.
+
+## 3b. Build it, test first (`tdd` mode)
 
 **The loop — one vertical slice at a time:**
 
@@ -85,10 +129,7 @@ were built that way.
 test file you are working in after each cycle; run the full suite once, at the
 end. Use the commands `AGENTS.md` gives, and heed its traps.
 
-**When a decision turns out to be wrong** — the code contradicts something that
-was agreed — stop and ask one short question. Never deviate from an agreed
-decision silently. If the decision changes, it will be recorded as a new ADR
-superseding the old one in step 5.
+**When a decision turns out to be wrong**, stop and ask, as in step 3.
 
 ## 4. Review — two axes, in parallel
 
@@ -130,8 +171,8 @@ words.*
 
 **Then act on it:**
 
-- **Fix** hard rule breaches and spec gaps, and re-run the affected tests and
-  the full suite.
+- **Fix** hard rule breaches and spec gaps, and re-run the affected tests (and,
+  in `tdd` mode, the full suite).
 - **Do not fix** the judgement calls. List them for the user — the smell, the
   place, one line on why — and let them decide.
 
@@ -147,6 +188,21 @@ one instead. It flips the ADRs this work built from `accepted — not built yet`
 `accepted`, removes the `state.md` rows it closed, and records whatever the work
 left behind. Running it before the commit means that a project which keeps its
 docs in git gets them in the same commit.
+
+**In default mode, also add an `Untested` row** to `state.md`, one per
+capability built, under a `## Untested` heading (create it if it is missing):
+
+```md
+## Untested
+
+- **An alert fires when spend passes its limit**: seams `POST /alerts`,
+  `evaluate_alerts()`; built from `a1b2c3d`; ADR 0042.
+```
+
+The capability is stated as behaviour, the seams are the ones from step 2, and
+`built from` is the starting point pinned in step 1. `/test-the-meal` reads these
+rows and deletes them once the tests exist. `update-project-docs` leaves them
+alone: building the work does not close them.
 
 ## 6. Commit — only with approval
 
@@ -167,8 +223,10 @@ docs in git gets them in the same commit.
 End with a short report in the user's language:
 
 - what was built, one line per step;
-- the seams tested, and anything built without a test and why;
-- the suite and typecheck result, stated as run — with the failing output if
+- default mode: the existing tests updated (and why), how each untested part
+  was verified, and the `Untested` rows written for `/test-the-meal`;
+- `tdd` mode: the seams tested, and anything built without a test and why;
+- the tests and typecheck result, stated as run — with the failing output if
   something failed;
 - the review: what was fixed, and the judgement calls waiting on the user;
 - what the docs update wrote or removed;
