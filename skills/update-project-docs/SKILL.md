@@ -6,8 +6,8 @@ disable-model-invocation: true
 
 # Updating the docs after work ships
 
-This runs when the user calls it — the last step after `lets-cook-together`,
-`implement` and `test-the-meal`, never on its own initiative and never from
+This runs when the user calls it — the last step after `lets-cook-together`
+and `implement` (and `test-the-meal`, when one was run), never on its own initiative and never from
 inside another skill. `init-project-docs` set the structure up and runs once.
 It assumes that structure:
 
@@ -204,8 +204,7 @@ whole of the job.
 - A new gap the work opened — including work left half-done at the end of a
   session — gets a row stating its **effect**, not its title.
 - A `## Untested` section left by older versions of `implement` is deleted:
-  tests are now written by `test-the-meal` from the change itself, so the rows
-  track nothing.
+  `implement` now tests risky logic as it builds, so the rows track nothing.
 - Sections with an expiry (a launch date, a migration window) are deleted when
   they expire.
 - **Never put a figure in `state.md` that will rot** — a test count, a row

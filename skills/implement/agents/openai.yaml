@@ -1,5 +1,5 @@
 interface:
   display_name: "Implement"
-  short_description: "Build the agreed work as settled, then review it once"
+  short_description: "Build the agreed work, test the risky logic, review it once"
 policy:
   allow_implicit_invocation: false

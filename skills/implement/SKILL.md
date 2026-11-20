@@ -1,14 +1,15 @@
 ---
 name: implement
-description: "Build the work a /lets-cook-together summary just settled, as agreed and without reopening it — no new tests, the existing ones kept green — then one general review of the result. Does one job: building. Tests are /test-the-meal's, docs and the commit are /update-project-docs's."
+description: "Build the work a /lets-cook-together summary just settled, as agreed and without reopening it — tests only where the logic is risky and only as many as it needs, the existing ones kept green — then one general review of the result. Docs and the commit are /update-project-docs's."
 disable-model-invocation: true
 ---
 
 # Implement
 
-Build what was agreed, then review it once. Nothing else: this skill writes no
-new tests, touches no project docs and proposes no commit. Each of those is a
-skill of its own, and the user runs it when they want it.
+Build what was agreed, then review it once. Tests are written only where the
+logic is risky, and only as many as it needs. This skill touches no project
+docs and proposes no commit: each of those is a skill of its own, and the user
+runs it when they want it.
 
 **Language.** Talk in the user's language. Code, comments and log messages are
 in **English**, unless the project's `AGENTS.md` says otherwise.
@@ -37,8 +38,9 @@ first edit, so what was there is not mistaken for this work.
 
 Build one step of the summary at a time, in its order.
 
-- **Write no new tests.** `/test-the-meal` writes them, after the user has seen
-  the work.
+- **Tests where they are needed, as many as are needed** — see *Which work
+  gets a test* below. Nothing else gets one: a test written for a screen that
+  is still being shaped is rewritten every time the screen changes.
 - **Keep the existing tests honest.** After each step, run the typecheck and the
   existing tests of the area touched — found by the module, endpoint or
   component they exercise — not the whole suite.
@@ -56,6 +58,24 @@ Build one step of the summary at a time, in its order.
 impossible, not merely awkward — ask **one short question** and wait. When it is
 only awkward, take the closest reasonable reading, build it, and say in the
 report what you did and why. Never deviate silently.
+
+### Which work gets a test
+
+**The project decides first.** If the project's `AGENTS.md` (or a per-area
+one) says which work needs a test, follow it. If it says nothing, use the
+principle: a test belongs where a wrong answer is **silent and expensive** —
+who can see or do what, money, time and dates, data another system reads, a
+change that cannot be taken back. Visual work, styling and copy never get one;
+the existing tests and the static checks cover them.
+
+**How.** For a step that falls in, write the tests at its public seam right
+after the step, before the next one: one to three, weighted to the edge and
+the refusal rather than the ordinary case, in the existing test file of that
+seam where there is one. No sub-agents, no ritual. **Test-first** only for pure
+logic with a crisp rule — a calculation, a date range, a parser — where
+watching the test fail first is the fastest way to get it right; everything
+else is tested right after it is built. Expected values come from the agreed
+behaviour or a known literal, never from running the code.
 
 ## 3. Review — once, in general
 
@@ -80,10 +100,12 @@ End with a short report in the user's language:
 
 - what was built, one line per step of the summary;
 - where a decision was read rather than built literally, and why;
+- the tests written, one line each: the seam, and which rule made the step
+  need one (the project's list or the principle);
 - the existing tests updated, and which agreed line made each necessary;
 - how each untested part was checked;
 - the checks and tests as run, with the failing output if something failed;
 - the review: what was fixed, and the judgement calls left for the user.
 
-Then stop. The next steps are the user's to call: `/test-the-meal` for the
-tests, `/update-project-docs` for the docs and the commit.
+Then stop. The next step is the user's to call: `/update-project-docs` for the
+docs and the commit (`/test-the-meal` only if they want a wider pass).

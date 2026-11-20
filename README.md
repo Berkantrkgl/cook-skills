@@ -7,21 +7,26 @@ reads `SKILL.md` files.
 | skill | what it does | invoked |
 |---|---|---|
 | `lets-cook-together` | Interviews you about a design, a few short questions per round, until every detail is settled and you both understand it the same way. It sharpens the project's vocabulary along the way. Writes no files: it ends with a summary in the conversation that `implement` builds from. | by you |
-| `implement` | Builds that summary as agreed, without reopening it. Writes no new tests, keeps the existing ones green, fixes what breaks, and ends with one general review of the change. No docs, no commit. | by you |
-| `test-the-meal` | Writes real tests for what just changed: two sub-agents in parallel, one testing the agreed behaviour at its edges and one trying to break it, never the happy path alone. Each test is proven able to fail; then the full suite runs once. `/test-the-meal trim <path>` slims an overgrown test file, only when you ask. | by you |
+| `implement` | Builds that summary as agreed, without reopening it. Writes tests only where the logic is risky (the project's `AGENTS.md` says what that is; otherwise: who can see or do what, money, time, data another system reads, what cannot be undone), keeps the existing ones green, fixes what breaks, and ends with one general review of the change. No docs, no commit. | by you |
+| `test-the-meal` | Optional: a wider test pass when you ask for one, in one go, at the seams, edges and refusals first. `/test-the-meal trim <path>` slims an overgrown test file. | by you |
 | `init-project-docs` | Sets up the documentation layout below, or migrates an existing pile of docs into it. | by you or the agent |
 | `update-project-docs` | The last step. Decides whether the work earns a record at all, puts each rule where it belongs (an ADR only rarely, at most one per piece of work), cleans up `state.md`, and proposes one commit for the code, the tests and the docs. | by you |
 
 ## The flow
 
 ```
-lets-cook-together  →  implement  →  test-the-meal  →  update-project-docs
-   (decide)             (build)        (test)           (record + commit)
+lets-cook-together  →  implement  →  update-project-docs
+   (decide)             (build,       (record + commit)
+                         risky logic
+                         tested)
+
+when you want a wider pass:   test-the-meal
 ```
 
 Each skill does one job and runs only when you call it; none of them starts
-another. You look at the work between `implement` and `test-the-meal`, so the
-tests and the docs are written for what you kept, not for a first draft.
+another. You look at the work after `implement`, so the docs are written for
+what you kept, not for a first draft — and tests go only where a wrong answer
+would be silent and expensive, never on a screen that is still being shaped.
 
 ## The documentation layout
 

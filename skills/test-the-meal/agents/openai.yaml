@@ -1,5 +1,5 @@
 interface:
   display_name: "Test the meal"
-  short_description: "Two agents write real, failure-proven tests for the latest work"
+  short_description: "An optional wider test pass, at the seams, in one go"
 policy:
   allow_implicit_invocation: false
