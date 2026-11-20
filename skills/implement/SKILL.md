@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Build the work a /lets-cook-together summary just settled, as agreed and without reopening it — no new tests, the existing ones kept green — then one general review of the result. Does one job: building. Tests are /test-the-meal's, docs and the commit are /update-project-docs's.
+description: "Build the work a /lets-cook-together summary just settled, as agreed and without reopening it — no new tests, the existing ones kept green — then one general review of the result. Does one job: building. Tests are /test-the-meal's, docs and the commit are /update-project-docs's."
 disable-model-invocation: true
 ---
 

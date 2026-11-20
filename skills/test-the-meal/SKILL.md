@@ -1,6 +1,6 @@
 ---
 name: test-the-meal
-description: Write real tests for the work just built — two sub-agents in parallel, one testing the agreed behaviour at its edges, one trying to break it — never the happy path alone, each test proven able to fail, then the full suite once. Reads what changed since the last commit (or a ref or path you give it). Does one job: tests. `trim <path>` instead slims an overgrown test file, and only when asked.
+description: "Write real tests for the work just built — two sub-agents in parallel, one testing the agreed behaviour at its edges, one trying to break it — never the happy path alone, each test proven able to fail, then the full suite once. Reads what changed since the last commit (or a ref or path you give it). Does one job: tests. `trim <path>` instead slims an overgrown test file, and only when asked."
 disable-model-invocation: true
 ---
 
