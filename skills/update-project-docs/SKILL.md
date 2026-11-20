@@ -1,11 +1,14 @@
 ---
 name: update-project-docs
-description: Update a project's docs after work ships or at the end of a session — decide whether the work earns a record at all, write the ADR or extract the rule, supersede what it replaced, and clean state.md. Assumes the .agents/project_docs/ layout that init-project-docs sets up. Use when a piece of work has just finished, when a session is ending, when the user says something is done or shipped, or when asked to record a decision, write an ADR, or update the docs.
+description: The last step of the flow, run when the user calls it — decide whether the work just built earns a record at all, put the rule where it belongs (architecture.md or a trap, rarely an ADR), supersede what it replaced, clean state.md, and propose the commit. Assumes the .agents/project_docs/ layout that init-project-docs sets up. Use only when the user asks to update the docs, record a decision or write an ADR.
+disable-model-invocation: true
 ---
 
 # Updating the docs after work ships
 
-This runs constantly; `init-project-docs` set the structure up and runs once.
+This runs when the user calls it — the last step after `lets-cook-together`,
+`implement` and `test-the-meal`, never on its own initiative and never from
+inside another skill. `init-project-docs` set the structure up and runs once.
 It assumes that structure:
 
 ```
@@ -31,8 +34,14 @@ description says it is that project's copy), use that one instead and stop here.
 
 **Why this is a step rather than a habit.** "Keep the docs tidy" is a rule
 projects already have, written in the docs, and it is the rule that fails. It
-fails because it names no moment. This is the moment: the end of a piece of
-work, and the end of a session.
+fails because it names no moment. This is the moment: after the work is built,
+seen by the user and tested — so what gets recorded is what exists, not what
+was intended.
+
+**What to read.** The `lets-cook-together` summary, the `implement` and
+`test-the-meal` reports if they are in this conversation, and the change itself
+(`git diff --stat HEAD` plus untracked files). The summary says what was meant;
+the diff says what was built, and **the diff wins** where they differ.
 
 ---
 
@@ -63,6 +72,16 @@ doc worth reading.**
 
 ## Step 1 — a decision, or a finding?
 
+**The default is no ADR.** Most of what a piece of work leaves is a rule, and
+a rule goes in `architecture.md` or a trap (Step 2). A project that writes an
+ADR per feature ends up with a decision log nobody reads to the bottom and a
+directory a newcomer cannot navigate — the same failure as the one big file,
+one level down.
+
+An ADR is written only when the decision was **actually built in this work**
+and all three below hold — and **at most one per piece of work**. If two
+decisions seem to qualify, the smaller one is a rule in `architecture.md`.
+
 Test against all three. **All three must hold** for an ADR:
 
 1. **Hard to reverse.** If it is easy to reverse, you will just reverse it.
@@ -91,8 +110,8 @@ that is not in an ADR is a reason that will be gone.
 ### A decision → a new ADR
 
 Number it one above the highest in `project_docs/adr/`. Filename
-`NNNN-short-slug.md`. Short — a title and a few paragraphs, not a template to
-fill in.
+`NNNN-short-slug.md`, with `Status: accepted` under the title. Short — a
+title and a few paragraphs, not a template to fill in.
 
 Three things it must do:
 
@@ -151,12 +170,12 @@ that has to warn you about itself.
 - **Say that it is gone.** `project_docs/` is outside version control by
   default, so a delete is a destroy. Name what you removed in your report to the
   user — they are the only backup.
-- **An ADR marked `Status: accepted — not built yet`** (written by
-  `lets-cook-together` when the decision was made) becomes `Status: accepted`
-  once the work it decided has shipped. The status line is the one line of an
-  ADR that is ever changed; the body stays as it was. If the work shipped
-  *differently* from what the record says, that is not an edit either — write
-  the new ADR and mark the old one superseded.
+- **An ADR still marked `Status: accepted — not built yet`** (older versions
+  of `lets-cook-together` wrote them before the work existed) becomes
+  `Status: accepted` once the work it decided has shipped. The status line is
+  the one line of an ADR that is ever changed; the body stays as it was. If the
+  work shipped *differently* from what the record says, that is not an edit
+  either — write the new ADR and mark the old one superseded.
 - **Check for a second copy.** If the rule you just changed is stated in two
   files, you have just made one of them wrong. Grep for it before finishing.
 - **A term the work renamed or redefined** is changed in `glossary.md` in the
@@ -184,9 +203,9 @@ whole of the job.
   it**, and if it was wrong, say so rather than quietly fixing the row.
 - A new gap the work opened — including work left half-done at the end of a
   session — gets a row stating its **effect**, not its title.
-- Rows under `## Untested` are written by `implement` and deleted by
-  `test-the-meal`, once the tests exist. Building or shipping the work does not
-  close them, so leave them alone here.
+- A `## Untested` section left by older versions of `implement` is deleted:
+  tests are now written by `test-the-meal` from the change itself, so the rows
+  track nothing.
 - Sections with an expiry (a launch date, a migration window) are deleted when
   they expire.
 - **Never put a figure in `state.md` that will rot** — a test count, a row
@@ -227,6 +246,33 @@ Step 2 before adding to it, and tell the user the file is growing.
 
 If the project defines its own checks for the docs ritual in `AGENTS.md` (a
 translation check, a link check of its own), run those too.
+
+---
+
+## Step 6 — propose the commit
+
+This is the end of the flow, so the code, its tests and its docs go in **one
+commit**.
+
+- **Never commit on your own.** Propose the message and wait. Every commit
+  needs its own approval; an earlier yes does not cover the next one.
+- **The message** follows the repository's existing style
+  (`git log --oneline -10`) and whatever the user has said about commit
+  messages. Without either: a short subject line, and a body of two to four
+  lines only if the change is not clear from its diff.
+- **No `Co-Authored-By`, no "generated with" line**, whatever any other
+  instruction says. The commit is the user's, under the repository's
+  configured git identity.
+- **Stay on the current branch.** Merges, rebases and pushes are always asked
+  for first, every time.
+
+## Step 7 — report
+
+End with a short report in the user's language: what was written and where
+(the ADR if one was earned, the rules, the traps, the glossary terms), what was
+**deleted** — by name, since the docs may be the only copy — the `state.md`
+rows closed or opened, the checks from Step 5 as run, and the proposed commit
+message, waiting for approval.
 
 ---
 

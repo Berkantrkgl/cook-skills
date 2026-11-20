@@ -6,21 +6,22 @@ reads `SKILL.md` files.
 
 | skill | what it does | invoked |
 |---|---|---|
-| `lets-cook-together` | Interviews you about a design, a few short questions per round, until you both understand it the same way. It sharpens the project's vocabulary along the way. When you confirm, it records the decisions (ADRs, glossary, `state.md`) and writes a summary `implement` can build from. | by you |
-| `implement` | Builds the agreed work. By default it writes no new tests: it keeps the existing ones green and records the seams as `Untested` in `state.md`. With `/implement tdd` it builds test-first instead. Either way it reviews the result on two separate axes (the project's rules, and what was agreed), updates the docs, and proposes a commit. It never commits without your approval. | by you |
-| `test-the-meal` | Writes the missing tests for everything `implement` left `Untested`, a few per feature and only at the seams, and proves each one can fail. In the same pass it proposes deleting or merging the tests that only add weight. Run it every few features. `/test-the-meal trim <path>` only slims an overgrown test file. | by you |
+| `lets-cook-together` | Interviews you about a design, a few short questions per round, until every detail is settled and you both understand it the same way. It sharpens the project's vocabulary along the way. Writes no files: it ends with a summary in the conversation that `implement` builds from. | by you |
+| `implement` | Builds that summary as agreed, without reopening it. Writes no new tests, keeps the existing ones green, fixes what breaks, and ends with one general review of the change. No docs, no commit. | by you |
+| `test-the-meal` | Writes real tests for what just changed: two sub-agents in parallel, one testing the agreed behaviour at its edges and one trying to break it, never the happy path alone. Each test is proven able to fail; then the full suite runs once. `/test-the-meal trim <path>` slims an overgrown test file, only when you ask. | by you |
 | `init-project-docs` | Sets up the documentation layout below, or migrates an existing pile of docs into it. | by you or the agent |
-| `update-project-docs` | Runs after a piece of work ships and at the end of each session. It decides whether the work earns a record, writes or supersedes ADRs, and cleans up `state.md`. | by you or the agent |
+| `update-project-docs` | The last step. Decides whether the work earns a record at all, puts each rule where it belongs (an ADR only rarely, at most one per piece of work), cleans up `state.md`, and proposes one commit for the code, the tests and the docs. | by you |
 
 ## The flow
 
 ```
-lets-cook-together  →  implement  →  update-project-docs
-   (decide)             (build)       (runs inside implement, and at session end)
-
-every few features:    test-the-meal
-                       (test what was built, trim the suite)
+lets-cook-together  →  implement  →  test-the-meal  →  update-project-docs
+   (decide)             (build)        (test)           (record + commit)
 ```
+
+Each skill does one job and runs only when you call it; none of them starts
+another. You look at the work between `implement` and `test-the-meal`, so the
+tests and the docs are written for what you kept, not for a first draft.
 
 ## The documentation layout
 
@@ -61,8 +62,8 @@ directory, for example `.claude/skills/` in a project for Claude Code.
 
 ## Credits
 
-The interview method in `lets-cook-together`, and the test discipline and
-two-axis review in `implement` and `test-the-meal`, are adapted from Matt Pocock's
+The interview method in `lets-cook-together`, and the test discipline in
+`test-the-meal`, are adapted from Matt Pocock's
 [skills](https://github.com/mattpocock/skills) (MIT).
 
 ## License

@@ -1,18 +1,17 @@
 ---
 name: lets-cook-together
-description: A relentless design interview that sharpens a plan until we share one understanding of it — round by round, a decision tree, the project's language made exact on the way — and then records what was decided (ADRs, glossary, state.md) and hands /implement a summary it can build from.
+description: A relentless design interview that sharpens a plan until we share one understanding of it — round by round, a decision tree, the project's language made exact on the way — and ends with a summary in the conversation that /implement builds from. Writes no files; recording is /update-project-docs's job, after the work exists.
 disable-model-invocation: true
 ---
 
 # Let's cook together
 
 Interview the user about a plan, a design or an idea until the two of you reach
-a **shared understanding** of it. Then, and only then, write down what was
-decided and hand it over to be built.
+a **shared understanding** of it — every detail settled, no open point left.
+Then hand it over to be built, as a summary in the conversation.
 
 **Language.** Talk in whatever language the user is writing in, and keep to it
-for the whole session. Everything written to a file is in **English**, unless
-the project's `AGENTS.md` says otherwise.
+for the whole session.
 
 ---
 
@@ -39,11 +38,6 @@ The **frontier** is every decision whose prerequisites are already settled —
 the questions that can be asked *now* without guessing at answers not yet
 given. A question whose answer depends on another question still open belongs
 to a later round.
-
-When the topic is something to be built, the tree always has one more branch:
-**where the behaviour will be tested** — the seams the tests will be written
-against, by `/implement tdd` or later by `/test-the-meal`. Ask it once what is being built is settled; it is not a detail
-to leave to implementation.
 
 **Facts are yours, decisions are the user's.** When a question needs a fact
 from the code, the files or the tools, dispatch a sub-agent to find it (or
@@ -102,11 +96,15 @@ comes up:
 - **Against the code.** When the user says how something works, check whether
   the code agrees, and surface a contradiction as a question.
 
-## 5. Nothing is written during the session
+## 5. Nothing is written — not during the session, not after it
 
-No file is touched while the rounds run. A decision reversed three rounds later
-would otherwise leave a record that has to be superseded before it was ever
-true. Keep the settled decisions and resolved terms in the conversation.
+This skill writes **no file**: no ADR, no glossary entry, no `state.md` row,
+no code. It ends in the conversation. Recording a decision before anything is
+built means recording an intention, and an intention changes the moment the
+user sees the result — a record written now has to be superseded before it was
+ever true. The docs are written by `/update-project-docs`, from what was
+actually built. Keep the settled decisions and resolved terms in the
+conversation, where `/implement` reads them.
 
 ## 6. Ending
 
@@ -119,69 +117,17 @@ like). Stop asking immediately. Show, in one list, the decisions still open and
 what you are assuming for each, and ask **one** confirmation: *these are my
 assumptions — agreed?* Do not reopen the rounds unless the user rejects one.
 
-Nothing is recorded and nothing is built before that confirmation.
+## 7. The summary
 
-## 7. Record what was decided
-
-After the confirmation, write everything in one pass.
-
-**Where.** Into `.agents/project_docs/`. If the project has no `project_docs/`
-but its `AGENTS.md` describes a doc layout of its own, write into that layout
-instead, following its rules. If it has neither, ask one question here, not at
-the start — *"there is no `project_docs/`; shall I run `/init-project-docs` and
-record into it?"* On yes, run the `init-project-docs` skill, then record. On no,
-write nothing; the summary in step 8 is then the only record, so say so. Never
-run it at the start: on a project that already has docs, init is a migration
-that deletes files, and it does not belong in the middle of a design talk.
-
-**ADRs** — one per decision that passes all three:
-
-1. **Hard to reverse** — changing your mind later costs something real.
-2. **Surprising without context** — a future reader would ask "why on earth
-   this way?"
-3. **The result of a real trade-off** — there were genuine alternatives.
-
-A constraint imposed from outside (a vendor limit, an API's behaviour, a
-compliance rule) counts even without alternatives, if it is invisible in the
-code. Most decisions of a session do **not** pass, and that is correct.
-
-Each ADR: `adr/NNNN-short-slug.md`, one above the highest number, a title and a
-few paragraphs, with **`Status: accepted — not built yet`** under the title. It
-names the rejected alternative, carries any figure that decided it, and does
-not describe the mechanism (that is `architecture.md`'s job, once it is built).
-Add its row to `adr/README.md`. One decision per record, even when several were
-made together.
-
-**Glossary** — each project-specific term the session resolved goes into
-`glossary.md`, created with the first one:
-
-```md
-**Tenant**:
-A customer of the product; owns its accounts and its people.
-_Avoid_: customer account, org
-```
-
-One or two sentences on what it *is*, the words not to use for it, no
-implementation detail. General programming concepts do not belong, however much
-the code uses them.
-
-**state.md** — each piece of work the session decided on gets a row stating its
-**effect**, not its title, so the plan survives the session ending.
-
-`architecture.md` is **not** touched: it describes what is built, and nothing
-is yet.
-
-## 8. Hand over to /implement
-
-Finish with a short summary in the conversation, in the user's language, in
-this shape:
+After the confirmation, finish with the summary `/implement` builds from, in
+the user's language, in this shape:
 
 - **Goal** — one or two sentences.
-- **Decisions** — the settled answers, one line each, with the ADR number where
-  one was written.
+- **Decisions** — the settled answers, one line each. Specific enough to build
+  from without asking again: names, routes, labels, rules, edge cases.
+- **Terms** — the project words this session made exact, one line each, if any.
 - **Out of scope** — what was explicitly left out.
-- **Test seams** — where the behaviour will be tested, agreed in the rounds.
 - **Steps** — the work in the order it should be built.
 
-Then list the files you wrote. Do not start implementing; that is `/implement`,
-and the user decides when.
+The summary is the hand-over and the only record. Do not start implementing;
+that is `/implement`, and the user decides when.

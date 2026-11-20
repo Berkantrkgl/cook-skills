@@ -154,7 +154,7 @@ conventions.
 | file | create it when |
 |---|---|
 | `README.md` (repo root) | it is missing **and** a human other than the author will ever open the repo. It answers "what is this, how do I run it" for a person; `AGENTS.md` answers the agent's question. Not the same document, and a `README.md` is not a substitute for either |
-| `project_docs/glossary.md` | a migration finds terms already defined somewhere, or the code plainly uses two words for one thing. Otherwise **do not create it here** — `lets-cook-together` creates it the first time a design session resolves a project-specific term, which is when there is something true to write. Format in Step 2A |
+| `project_docs/glossary.md` | a migration finds terms already defined somewhere, or the code plainly uses two words for one thing. Otherwise **do not create it here** — `update-project-docs` creates it the first time finished work leaves a project-specific term, which is when there is something true to write. Format in Step 2A |
 | `<area>/AGENTS.md` | Step 0 found an area with its own conventions |
 
 **Do not create:** an archive file of any name; `CHANGELOG.md` unless the thing
